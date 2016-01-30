@@ -1,0 +1,50 @@
+﻿<div class="jumbotron">
+    <hr/>
+    <div>
+        <h2>SHORTEN A URL</h2>
+        @Html.TextBox("UrlToShorten")
+        <button type="button" id="shorten-url-button">Shorten URL!</button>
+        <span id="shortened-url-display-text"></span>
+    </div>
+    <hr />
+    <div>
+        <h2>INFLATE A URL</h2>
+        @Html.TextBox("UrlToInflate")
+        <button type="button" id="inflate-url-button">Inflate URL!</button>
+        <span id="inflated-url-display-text"></span>
+    </div>
+    <hr />
+</div>
+<script type="text/javascript">
+    function updateDisplayText(selector, value) {
+        $(selector).html(value);
+    };
+
+    function updateInflatedUrlDisplayText(value) {
+        updateDisplayText('#inflated-url-display-text', value);
+    };
+
+    function updateShortenedUrlDisplayText(value) {
+        updateDisplayText('#shortened-url-display-text', value);
+    };
+
+    $('#shorten-url-button').click(function postToShortenUrl() {
+        $.post('/url/shorten?url=' + encodeURIComponent($('input[name=UrlToShorten]').val()))
+            .done(function handleSuccess(data, textStatus, jqXHR ) {
+                updateShortenedUrlDisplayText('Shortened URL: ' + data);
+            })
+            .fail(function handleFailure(jqXHR, textStatus, errorThrown) {
+                updateShortenedUrlDisplayText('Error: ' + errorThrown);
+            });
+    });
+
+    $('#inflate-url-button').click(function getInflatedUrl() {
+        $.get('/url/' + $('input[name=UrlToInflate]').val())
+            .done(function handleSuccess(data, textStatus, jqXHR) {
+                updateInflatedUrlDisplayText('Inflated URL: ' + data);
+            })
+            .fail(function handleFailure(jqXHR, textStatus, errorThrown) {
+                updateInflatedUrlDisplayText('Error: ' + errorThrown);
+            });
+    });
+</script>
