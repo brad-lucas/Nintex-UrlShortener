@@ -29,7 +29,7 @@
     };
 
     $('#shorten-url-button').click(function postToShortenUrl() {
-        $.post('/url/shorten?url=' + encodeURIComponent($('input[name=UrlToShorten]').val()))
+        $.post('/shorten?url=' + encodeURIComponent($('input[name=UrlToShorten]').val()))
             .done(function handleSuccess(data, textStatus, jqXHR ) {
                 updateShortenedUrlDisplayText('Shortened URL: ' + data);
             })
@@ -39,7 +39,7 @@
     });
 
     $('#inflate-url-button').click(function getInflatedUrl() {
-        $.get('/url/' + $('input[name=UrlToInflate]').val())
+        $.get('/' + $('input[name=UrlToInflate]').val())
             .done(function handleSuccess(data, textStatus, jqXHR) {
                 updateInflatedUrlDisplayText('Inflated URL: ' + data);
             })

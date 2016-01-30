@@ -8,9 +8,11 @@ namespace NintexUrlShortener.Controllers
     /// <summary>
     /// API controller that handles URL operations - namely, shortening and inflating.
     /// </summary>
-    [RoutePrefix("url")]
+    //[RoutePrefix("url")]
     public sealed class UrlShortenerApiController : ApiController
     {
+        private const string InflateRouteName = "InflateUrlRoute";
+
         /// <summary>
         /// The locally stored URL shortener to be used for operations.
         /// </summary>
@@ -42,7 +44,7 @@ namespace NintexUrlShortener.Controllers
         /// <returns>
         /// An <see cref="IHttpActionResult"/> indicating the success of the operation.
         /// </returns>
-        [Route("{id}")]
+        [Route("{id}", Name = InflateRouteName)]
         [HttpGet]
         public IHttpActionResult InflateShortenedUrl(string id = null)
         {
@@ -60,7 +62,8 @@ namespace NintexUrlShortener.Controllers
         [HttpPost]
         public IHttpActionResult ShortenUrl(string url = null)
         {
-            return this.PerformUrlShortenerOperation(() => this.urlShortener.Shorten(url, hash => this.Url.Link(string.Empty, new { id = hash })));
+            return this.PerformUrlShortenerOperation(
+                () => this.urlShortener.Shorten(url, hash => this.Url.Link(InflateRouteName, new { id = hash })));
         }
 
         /// <summary>
@@ -70,7 +73,10 @@ namespace NintexUrlShortener.Controllers
         /// <returns>An <see cref="IHttpActionResult" /> to be returned by the controller's public action.</returns>
         private IHttpActionResult PerformUrlShortenerOperation(Func<UrlShortenerResult> urlShortenerFunc)
         {
+            // invoke the operation and get the UrlShortenerResult
             var result = urlShortenerFunc.Invoke();
+
+            // handle translate resulting status code to a proper Web API response
             switch (result.StatusCode)
             {
                 case HttpStatusCode.OK:

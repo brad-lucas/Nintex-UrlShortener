@@ -106,7 +106,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UrlShortener\NintexUrlShortener.csproj">
+    <ProjectReference Include="..\NintexUrlShortener\NintexUrlShortener.csproj">
       <Project>{AFF32C2A-29FE-47A4-9DBA-FCCE0C75D433}</Project>
       <Name>NintexUrlShortener</Name>
     </ProjectReference>
