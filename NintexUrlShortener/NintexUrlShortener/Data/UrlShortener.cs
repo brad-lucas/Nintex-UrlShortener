@@ -71,6 +71,14 @@ namespace NintexUrlShortener.Data
                 };
             }
 
+            if (url.All(char.IsDigit))
+            {
+                return new UrlShortenerResult(HttpStatusCode.BadRequest)
+                {
+                    Message = ShortenUrlInvalidMessage
+                };
+            }
+
             if (!url.StartsWith("http"))
             {
                 url = "http://" + url; // assume HTTP (not HTTPS)

@@ -144,10 +144,16 @@ namespace NintexUrlShortener.Tests.Data
         [TestMethod]
         public void UrlShortener_Shorten_UrlIsInvalidOrNotWellFormed()
         {
-            var result = this.TestShorten("http://");
-            Assert.IsNotNull(result);
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
-            Assert.AreEqual(UrlShortener.ShortenUrlInvalidMessage, result.Message);
+            Action<string> testInvalidOrNotWellFormed = input =>
+            {
+                var result = this.TestShorten(input);
+                Assert.IsNotNull(result);
+                Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+                Assert.AreEqual(UrlShortener.ShortenUrlInvalidMessage, result.Message);
+            };
+
+            testInvalidOrNotWellFormed.Invoke("123");
+            testInvalidOrNotWellFormed.Invoke("http://");
         }
 
         private static string GetMockInflatedUrl(string hash)
