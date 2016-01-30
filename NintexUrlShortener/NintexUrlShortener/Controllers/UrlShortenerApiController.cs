@@ -11,7 +11,7 @@ namespace NintexUrlShortener.Controllers
     //[RoutePrefix("url")]
     public sealed class UrlShortenerApiController : ApiController
     {
-        private const string InflateRouteName = "InflateUrlRoute";
+        internal const string InflateRouteName = "InflateUrlRoute";
 
         /// <summary>
         /// The locally stored URL shortener to be used for operations.
@@ -83,6 +83,11 @@ namespace NintexUrlShortener.Controllers
                     return this.Ok<string>(result.Message);
 
                 case HttpStatusCode.BadRequest:
+                    if (string.IsNullOrWhiteSpace(result.Message))
+                    {
+                        return this.BadRequest();
+                    }
+
                     return this.BadRequest(result.Message);
 
                 case HttpStatusCode.NotFound:

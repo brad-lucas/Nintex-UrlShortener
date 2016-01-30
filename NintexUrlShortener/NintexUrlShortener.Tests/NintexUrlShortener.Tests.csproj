@@ -9,8 +9,8 @@
     <ProjectGuid>{501F580B-CA51-4595-9D20-BECE35AE98A1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UrlShortener.Tests</RootNamespace>
-    <AssemblyName>UrlShortener.Tests</AssemblyName>
+    <RootNamespace>NintexUrlShortener.Tests</RootNamespace>
+    <AssemblyName>NintexUrlShortener.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\UrlShortenerApiControllerTest.cs" />
+    <Compile Include="Data\UrlShortenerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>

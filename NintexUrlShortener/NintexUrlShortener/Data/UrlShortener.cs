@@ -8,6 +8,10 @@ namespace NintexUrlShortener.Data
 {
     public sealed class UrlShortener : IUrlShortener
     {
+        internal const string ShortenUrlInvalidMessage = "URL provided is not valid.";
+
+        internal const string ShortenUrlNullOrEmptyMessage = "Must provide a URL.";
+
         private static readonly Lazy<KeyValuePair<string, int>> DefaultKeyValuePairLazy = new Lazy<KeyValuePair<string, int>>();
 
         /// <summary>
@@ -25,9 +29,8 @@ namespace NintexUrlShortener.Data
         {
             if (string.IsNullOrWhiteSpace(id))
             {
-                return new UrlShortenerResult
+                return new UrlShortenerResult(HttpStatusCode.BadRequest)
                 {
-                    StatusCode = HttpStatusCode.BadRequest,
                     Message = "Must provide an ID."
                 };
             }
@@ -37,12 +40,11 @@ namespace NintexUrlShortener.Data
             var matchingKeyValuePair = LookupTableLazy.Value.FirstOrDefault(ltv => ltv.Value == numericId);
             if (matchingKeyValuePair.Equals(DefaultKeyValuePairLazy.Value))
             {
-                return new UrlShortenerResult { StatusCode = HttpStatusCode.NotFound };
+                return new UrlShortenerResult(HttpStatusCode.NotFound);
             }
 
-            return new UrlShortenerResult
+            return new UrlShortenerResult(HttpStatusCode.OK)
             {
-                StatusCode = HttpStatusCode.OK,
                 Message = matchingKeyValuePair.Key
             };
         }
@@ -63,10 +65,9 @@ namespace NintexUrlShortener.Data
 
             if (string.IsNullOrWhiteSpace(url))
             {
-                return new UrlShortenerResult
+                return new UrlShortenerResult(HttpStatusCode.BadRequest)
                 {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    Message = "Must provide a URL."
+                    Message = ShortenUrlNullOrEmptyMessage
                 };
             }
 
@@ -78,10 +79,9 @@ namespace NintexUrlShortener.Data
             Uri uri;
             if (!Uri.TryCreate(url, UriKind.Absolute, out uri) || !uri.IsWellFormedOriginalString())
             {
-                return new UrlShortenerResult
+                return new UrlShortenerResult(HttpStatusCode.BadRequest)
                 {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    Message = "URL provided is not valid."
+                    Message = ShortenUrlInvalidMessage
                 };
             }
 
@@ -100,9 +100,8 @@ namespace NintexUrlShortener.Data
                 LookupTableLazy.Value.Add(urlForLookup, shortUrlId);
             }
 
-            return new UrlShortenerResult
+            return new UrlShortenerResult(HttpStatusCode.OK)
             {
-                StatusCode = HttpStatusCode.OK,
                 Message = getUrlFunc.Invoke(UrlShortenerEncoder.Encode(shortUrlId))
             };
         }
